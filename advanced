@@ -1,0 +1,27 @@
+
+const twoDigits = (number) => number < 10 ? `0${number}` : number;
+
+const SECONDS_IN_MINUTE = 60;
+const SECONDS_IN_HOUR = SECONDS_IN_MINUTE * 60;
+const SECONDS_IN_DAY = SECONDS_IN_HOUR * 24;
+
+const humanReadableClockGenerator = (ratios) => (seconds) => {
+  return [...ratios, 1]
+    .reduce(
+      ({ acc, currentValue }, ratio) => {
+        return {
+          acc: [...acc, Math.floor(currentValue / ratio)],
+          currentValue: currentValue % ratio
+        };
+      },
+      { acc: [], currentValue: seconds }
+    )
+    .acc.map(twoDigits)
+    .join(":");
+};
+
+const humanReadable = humanReadableClockGenerator([SECONDS_IN_HOUR, SECONDS_IN_MINUTE]);
+console.log(humanReadable(99942));
+
+const hoursAndMinutes = humanReadableClockGenerator([SECONDS_IN_MINUTE]);
+console.log(hoursAndMinutes(99));
